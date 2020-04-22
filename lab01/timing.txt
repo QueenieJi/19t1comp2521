@@ -1,0 +1,49 @@
+Input	Initial	Has	Number	AvgTime 	AvgTime
+Size	Order	Dups	of runs forusel 	forsort
+5000	random	no	5	0.13sec 	0.010sec
+5000	sorted	no	5	0.20sec 	0.008sec
+5000	reverse	no	5	0.02sec 	0.0048sec
+5000	random	yes	5	0.13sec 	0.008sec
+5000	sorted	yes	5	0.57sec 	0.0088sec
+5000	reverse	yes	5	0.034sec	0.008sec
+10000	random	no	5	0.36sec 	0.016sec
+10000	sorted	no	5	0.58sec 	0.008sec
+10000	reverse	no	5	0.034sec	0.0056sec
+10000	random	yes	5	0.37sec 	0.015sec
+10000	sorted	yes	5	0.56sec 	0.0048sec
+10000	reverse	yes	5	0.027sec	0.0088sec
+50000	random	no  5   14sec   	0.049sec
+50000	sorted	no	5	13sec   	0.0052sec
+50000	reverse	no	5	0.052sec	0.026sec
+50000	random	yes	5   14sec   	0.053sec
+50000	sorted	yes	5	13sec   	0.028sec
+50000	reverse	yes	5	0.1sec  	0.029sec
+
+Comments:
+One pattern obtained from the table is that the reverse list is much quicker than 
+sorted list regardless of wether there are duplicates. The reason for that is 
+in my program, if the new number is greater than all other number in the list, it 
+will go through the while loop to compare with all the numbers in the list. Suppose
+there is n numbers need to be sorted, can be denoted as O(n^2). However, in my
+program, if every new number is smaller than the smallest item in the list, there
+is an if statement deal with the special case. Therefore it only needs O(n) times 
+computation. Hence it will be much quicker. The improvement could be done is add 
+another if statement before the loop to deal with the sorted situation.
+The code could be something similar as shown below:
+    if (v >= L->last->data) {
+        L->last->next = n;
+        n->next = NULL;
+        L->last = n;
+        L->size ++;
+    }
+Then the longest timing case could be random since neither sorted nor reverse list
+enters the loop.
+
+Another pattern is the duplications has quite limiting effects of the timing. That
+is because my program deals with duplications together with no duplicate cases by 
+using <= or >= in while conditions and if conditions.
+
+Also, with the increasing size of the numbers, the time increases as well, which 
+is reasonable.
+
+

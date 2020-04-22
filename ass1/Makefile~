@@ -1,0 +1,59 @@
+# COMP2521 19T1 ... assignment 1
+
+# C compiler configuration ... mostly stolen from 3c.
+# 2019-03-04	Jashank Jeremy <{jashankj,z5017851}@cse.unsw.edu.au>
+CC	 = clang
+
+CFLAGS	+= -std=gnu11  # select standard 'gnu11' (for C11 with GNU extensions)
+LDLIBS += -lm         # include math lib
+
+# enable debugging (-g), AddressSanitizer and UndefinedBehaviourSanitizer
+CFLAGS	+= -g -fsanitize=address -fsanitize=undefined
+
+# `-Weverything' flag turns on every possible warning in Clang.
+CFLAGS	+= -Weverything
+
+# Turn off the warnings we aren't especially interested in.
+CFLAGS	+= -Wno-padded -Wno-reserved-id-macro -Wno-gnu -Wno-c++-compat
+
+# Make error stack traces as useful as possible
+CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
+
+# We prefer to avoid precise POSIX and irritating ISO C compliance,
+# so make available as much of the C implementation's features as we
+# possibly can.  expressivity > standards compliance.
+CFLAGS	+= -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_SVID_SOURCE -D_GNU_SOURCE
+
+# [Add] all symbols to the dynamic symbol table.
+LDFLAGS	+= -rdynamic
+
+
+.PHONY: all
+all:	task1 task2 task3
+
+task1:		task1.o DateTime.o MailMessage.o MMList.o
+task1.o:	task1.c DateTime.h MailMessage.h MMList.h
+
+task2:		task2.o DateTime.o MailMessage.o MMList.o MMTree.o
+task2.o:	task2.c DateTime.h MailMessage.h MMList.h MMTree.h
+
+task3:		task3.o DateTime.o MailMessage.o MMList.o MMTree.o ThreadTree.o
+task3.o:	task3.c DateTime.h MailMessage.h MMList.h MMTree.h ThreadTree.h
+
+DateTime.o:	DateTime.c DateTime.h
+MailMessage.o:	MailMessage.c MailMessage.h DateTime.h
+MMTree.o:	MMTree.c MMTree.h MailMessage.h
+MMList.o:	MMList.c MMList.h MailMessage.h
+ThreadTree.o:	ThreadTree.c ThreadTree.h MailMessage.h MMList.h MMTree.h
+
+.PHONY: check
+check: task1 task2 task3
+	./check
+
+.PHONY: clean
+clean:
+	-rm -f task1 task1.o
+	-rm -f task2 task2.o
+	-rm -f task3 task3.o
+	-rm -f DateTime.o MailMessage.o MMTree.o MMList.o ThreadTree.o
+	-rm -f tests/*.out

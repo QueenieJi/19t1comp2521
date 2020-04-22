@@ -1,0 +1,6 @@
+int isHeap(BSTree t){
+    if (t == NULL) return 1;
+    if (data(t) < left(t)) return 0;
+    if (data(t) < right(t)) return 0;
+    return 
+}
